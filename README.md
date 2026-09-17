@@ -51,8 +51,6 @@ studentmanagement/
 ├── data/
 │   ├── students.csv             # Persistent student database
 │   ├── students_report.txt      # Exported report files
-│   ├── statement.md             # Detailed problem statement & scope
-│   └── README.md                # Quick data reference
 ├── doc/
 │   └── PROJECT_REPORT.md        # Comprehensive 15-section project report
 ├── src/
