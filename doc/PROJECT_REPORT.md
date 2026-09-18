@@ -101,21 +101,21 @@ The application adopts a **3-Tier Layered Architecture**:
 ### 7.1 Use Case Diagram
 
 ```mermaid
-usecaseDiagram
-    actor Faculty as "Faculty / Administrator"
-    
-    package "Student Management System" {
-        usecase UC1 as "Add New Student"
-        usecase UC2 as "View Student Registry"
-        usecase UC3 as "Search Student Records"
-        usecase UC4 as "Update Profile & Marks"
-        usecase UC5 as "Delete Student Record"
-        usecase UC6 as "Generate Report Card"
-        usecase UC7 as "View Class Analytics & Histogram"
-        usecase UC8 as "Sort Student Records"
-        usecase UC9 as "Export Summary Report"
-        usecase UC10 as "Auto-Sync to CSV Disk"
-    }
+flowchart LR
+    Faculty["👤 Faculty / Administrator"]
+
+    subgraph System["Student Management System"]
+        UC1(["Add New Student"])
+        UC2(["View Student Registry"])
+        UC3(["Search Student Records"])
+        UC4(["Update Profile & Marks"])
+        UC5(["Delete Student Record"])
+        UC6(["Generate Report Card"])
+        UC7(["View Class Analytics & Histogram"])
+        UC8(["Sort Student Records"])
+        UC9(["Export Summary Report"])
+        UC10(["Auto-Sync to CSV Disk"])
+    end
 
     Faculty --> UC1
     Faculty --> UC2
@@ -126,10 +126,10 @@ usecaseDiagram
     Faculty --> UC7
     Faculty --> UC8
     Faculty --> UC9
-    
-    UC1 ..> UC10 : <<include>>
-    UC4 ..> UC10 : <<include>>
-    UC5 ..> UC10 : <<include>>
+
+    UC1 -.->|include| UC10
+    UC4 -.->|include| UC10
+    UC5 -.->|include| UC10
 ```
 
 ### 7.2 Process Flow / Workflow Diagram
