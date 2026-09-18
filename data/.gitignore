@@ -1,3 +1,0 @@
-# Ignore test artifacts in data directory
-test_*.csv
-test_export.txt
