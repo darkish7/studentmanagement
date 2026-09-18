@@ -479,10 +479,11 @@ A comprehensive test suite [`SystemTest.java`](file:///c:/Users/bisen/OneDrive/D
 
 | Test Suite | Target Component | Verifications Checked | Result |
 |---|---|---|---|
-| **Suite 1** | `InputValidator` | Valid/invalid mark bounds, semester bounds ($1-8$), alphanumeric registration numbers. | **PASS** |
-| **Suite 2** | `GradeCalculator` | Mark-to-grade conversions (`A+`, `A`, `B`, `C`, `D`, `F`), GPA 4.0 scale boundary mappings. | **PASS** |
-| **Suite 3** | `Student` Model | Total score calculation, average percentage, passing criteria, CSV string serialization/deserialization. | **PASS** |
-| **Suite 4** | Repository & Service | Record insertion, duplicate prevention, query by RegNo, search filter, statistical aggregation. | **PASS** |
+| **Suite 1** | `InputValidator` | Valid/invalid mark bounds, semester bounds ($1-8$), alphanumeric registration numbers, safe stream reads. | **PASS** |
+| **Suite 2** | `GradeCalculator` | Mark-to-grade conversions (`A+`, `A`, `B`, `C`, `D`, `F`), GPA 4.0 scale boundary mappings, cohort statistics. | **PASS** |
+| **Suite 3** | `Student` Model | Total score calculation, average percentage, passing criteria, CSV string serialization/deserialization with escaped commas. | **PASS** |
+| **Suite 4** | Repository & Service | Record insertion, duplicate prevention, query by RegNo, search filter, sorting comparators, persistence reload. | **PASS** |
+| **Suite 5** | `ReportService` | File export generation, summary verification, table alignments, and null-safety. | **PASS** |
 
 ### Test Execution Command:
 ```bash
@@ -491,8 +492,8 @@ java -ea -cp bin studentmanagement.SystemTest
 
 **Output**:
 ```
-Running Automated Tests...
-ALL 4 AUTOMATED TEST SUITES PASSED SUCCESSFULLY!
+Running Comprehensive Automated Tests...
+ALL AUTOMATED TEST SUITES PASSED SUCCESSFULLY!
 ```
 
 ---

@@ -9,11 +9,11 @@ import java.util.Scanner;
 public class InputValidator {
 
     private InputValidator() {
-        // Utility class
+        // Private constructor to prevent instantiation
     }
 
     public static boolean isValidMarks(double marks) {
-        return marks >= 0 && marks <= 100;
+        return marks >= 0.0 && marks <= 100.0;
     }
 
     public static boolean isValidSemester(int semester) {
@@ -29,11 +29,15 @@ public class InputValidator {
     }
 
     private static String safeReadLine(Scanner scanner) {
+        if (scanner == null) {
+            return null;
+        }
         try {
             if (scanner.hasNextLine()) {
                 return scanner.nextLine();
             }
         } catch (NoSuchElementException | IllegalStateException ignored) {
+            // Scanner stream closed or exhausted
         }
         return null;
     }

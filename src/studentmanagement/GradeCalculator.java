@@ -1,6 +1,9 @@
 package studentmanagement;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Utility class for grade computation and statistical calculations.
@@ -8,21 +11,23 @@ import java.util.*;
 public class GradeCalculator {
 
     private GradeCalculator() {
-        // Utility class
+        // Private constructor to prevent instantiation
     }
 
     public static String calculateGrade(double average) {
-        if (average >= 90)
+        if (average >= 90.0) {
             return "A+";
-        if (average >= 80)
+        } else if (average >= 80.0) {
             return "A";
-        if (average >= 70)
+        } else if (average >= 70.0) {
             return "B";
-        if (average >= 60)
+        } else if (average >= 60.0) {
             return "C";
-        if (average >= 50)
+        } else if (average >= 50.0) {
             return "D";
-        return "F";
+        } else {
+            return "F";
+        }
     }
 
     public static double calculateGpa(double average) {
@@ -42,15 +47,24 @@ public class GradeCalculator {
     }
 
     public static String getRemark(String grade) {
-        if (grade == null) return "N/A";
-        switch (grade.toUpperCase()) {
-            case "A+": return "Outstanding Performance";
-            case "A": return "Excellent Performance";
-            case "B": return "Good / Above Average";
-            case "C": return "Average";
-            case "D": return "Pass / Needs Improvement";
-            case "F": return "Fail / Unsatisfactory";
-            default: return "N/A";
+        if (grade == null) {
+            return "N/A";
+        }
+        switch (grade.toUpperCase(Locale.ROOT)) {
+            case "A+":
+                return "Outstanding Performance";
+            case "A":
+                return "Excellent Performance";
+            case "B":
+                return "Good / Above Average";
+            case "C":
+                return "Average";
+            case "D":
+                return "Pass / Needs Improvement";
+            case "F":
+                return "Fail / Unsatisfactory";
+            default:
+                return "N/A";
         }
     }
 
@@ -113,8 +127,12 @@ public class GradeCalculator {
 
         stats.classAverage = sum / stats.totalStudents;
         stats.passRate = ((double) stats.passedCount / stats.totalStudents) * 100.0;
+
         if (stats.lowestAverage > 100.0) {
             stats.lowestAverage = 0.0;
+        }
+        if (stats.highestAverage < 0.0) {
+            stats.highestAverage = 0.0;
         }
 
         return stats;

@@ -26,6 +26,9 @@ public class StudentService {
     }
 
     public Optional<Student> getStudentByRegNo(String regNo) {
+        if (regNo == null) {
+            return Optional.empty();
+        }
         return repository.findByRegNo(regNo);
     }
 
@@ -41,10 +44,16 @@ public class StudentService {
     }
 
     public boolean deleteStudent(String regNo) {
+        if (regNo == null) {
+            return false;
+        }
         return repository.deleteByRegNo(regNo);
     }
 
     public boolean exists(String regNo) {
+        if (regNo == null) {
+            return false;
+        }
         return repository.existsByRegNo(regNo);
     }
 
@@ -52,15 +61,18 @@ public class StudentService {
         if (query == null || query.trim().isEmpty()) {
             return getAllStudents();
         }
-        String q = query.trim().toLowerCase();
+        String q = query.trim().toLowerCase(Locale.ROOT);
         return repository.findAll().stream()
-                .filter(s -> s.getRegNo().toLowerCase().contains(q)
-                        || s.getName().toLowerCase().contains(q)
-                        || s.getDepartment().toLowerCase().contains(q))
+                .filter(s -> s.getRegNo().toLowerCase(Locale.ROOT).contains(q)
+                        || s.getName().toLowerCase(Locale.ROOT).contains(q)
+                        || s.getDepartment().toLowerCase(Locale.ROOT).contains(q))
                 .collect(Collectors.toList());
     }
 
     public List<Student> getStudentsSorted(Comparator<Student> comparator) {
+        if (comparator == null) {
+            return getAllStudents();
+        }
         return repository.findAll().stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());

@@ -54,6 +54,7 @@ public class MenuHandler {
                     break;
                 default:
                     System.out.println("Invalid option.");
+                    break;
             }
         }
     }
@@ -91,10 +92,14 @@ public class MenuHandler {
         }
 
         String name = InputValidator.readText(scanner, "Enter Full Name: ");
-        if (name.isEmpty()) return;
+        if (name.isEmpty()) {
+            return;
+        }
 
         String department = InputValidator.readText(scanner, "Enter Department (e.g. CSE, IT, MECH): ");
-        if (department.isEmpty()) return;
+        if (department.isEmpty()) {
+            return;
+        }
 
         int semester = InputValidator.readSemester(scanner, "Enter Semester (1-8): ");
 
@@ -122,7 +127,9 @@ public class MenuHandler {
     private void handleSearchStudent() {
         System.out.println("\n--- [ Search Students ] ---");
         String query = InputValidator.readText(scanner, "Enter Reg No, Name, or Department to search: ");
-        if (query.isEmpty()) return;
+        if (query.isEmpty()) {
+            return;
+        }
         List<Student> results = studentService.search(query);
         System.out.printf("Found %d matching record(s):%n", results.size());
         ReportService.printStudentTable(results);
@@ -131,7 +138,9 @@ public class MenuHandler {
     private void handleUpdateStudent() {
         System.out.println("\n--- [ Update Student ] ---");
         String regNo = InputValidator.readRegNo(scanner, "Enter Registration Number to update: ");
-        if (regNo.isEmpty()) return;
+        if (regNo.isEmpty()) {
+            return;
+        }
 
         Optional<Student> opt = studentService.getStudentByRegNo(regNo);
         if (opt.isEmpty()) {
@@ -151,11 +160,19 @@ public class MenuHandler {
         switch (choice) {
             case 1:
                 String newName = InputValidator.readText(scanner, "Enter new name: ");
-                if (!newName.isEmpty()) student.setName(newName);
+                if (newName.isEmpty()) {
+                    System.out.println("Update cancelled.");
+                    return;
+                }
+                student.setName(newName);
                 break;
             case 2:
                 String newDept = InputValidator.readText(scanner, "Enter new department: ");
-                if (!newDept.isEmpty()) student.setDepartment(newDept);
+                if (newDept.isEmpty()) {
+                    System.out.println("Update cancelled.");
+                    return;
+                }
+                student.setDepartment(newDept);
                 break;
             case 3:
                 int newSem = InputValidator.readSemester(scanner, "Enter new semester (1-8): ");
@@ -170,6 +187,8 @@ public class MenuHandler {
             case 0:
                 System.out.println("Update cancelled.");
                 return;
+            default:
+                break;
         }
 
         if (studentService.updateStudent(student)) {
@@ -182,7 +201,9 @@ public class MenuHandler {
     private void handleDeleteStudent() {
         System.out.println("\n--- [ Delete Student ] ---");
         String regNo = InputValidator.readRegNo(scanner, "Enter Registration Number to delete: ");
-        if (regNo.isEmpty()) return;
+        if (regNo.isEmpty()) {
+            return;
+        }
 
         Optional<Student> opt = studentService.getStudentByRegNo(regNo);
         if (opt.isEmpty()) {
@@ -192,7 +213,7 @@ public class MenuHandler {
 
         Student student = opt.get();
         String confirm = InputValidator.readOptionalString(scanner,
-                String.format("Are you sure you want to delete '%s' (Reg No: %s)? (y/n): ", student.getName(), student.getRegNo())).toLowerCase();
+                String.format("Are you sure you want to delete '%s' (Reg No: %s)? (y/n): ", student.getName(), student.getRegNo())).toLowerCase(Locale.ROOT);
         if (confirm.equals("y") || confirm.equals("yes")) {
             if (studentService.deleteStudent(regNo)) {
                 System.out.println("[SUCCESS] Student deleted successfully.");
@@ -207,7 +228,9 @@ public class MenuHandler {
     private void handleViewReportCard() {
         System.out.println("\n--- [ View Student Report Card ] ---");
         String regNo = InputValidator.readRegNo(scanner, "Enter Registration Number: ");
-        if (regNo.isEmpty()) return;
+        if (regNo.isEmpty()) {
+            return;
+        }
 
         Optional<Student> opt = studentService.getStudentByRegNo(regNo);
         if (opt.isEmpty()) {

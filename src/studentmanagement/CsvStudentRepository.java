@@ -54,7 +54,7 @@ public class CsvStudentRepository implements StudentRepository {
                 }
                 Student student = Student.fromCsv(line);
                 if (student != null && !student.getRegNo().isEmpty()) {
-                    cache.put(student.getRegNo().toUpperCase(), student);
+                    cache.put(student.getRegNo().toUpperCase(Locale.ROOT), student);
                 }
             }
         } catch (IOException e) {
@@ -63,12 +63,17 @@ public class CsvStudentRepository implements StudentRepository {
     }
 
     private synchronized void saveToCsv() {
-        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-            writer.write(CSV_HEADER);
-            writer.newLine();
-            for (Student student : cache.values()) {
-                writer.write(student.toCsv());
+        try {
+            if (filePath.getParent() != null && !Files.exists(filePath.getParent())) {
+                Files.createDirectories(filePath.getParent());
+            }
+            try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+                writer.write(CSV_HEADER);
                 writer.newLine();
+                for (Student student : cache.values()) {
+                    writer.write(student.toCsv());
+                    writer.newLine();
+                }
             }
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
@@ -80,14 +85,16 @@ public class CsvStudentRepository implements StudentRepository {
         if (student == null || student.getRegNo().isEmpty()) {
             return;
         }
-        cache.put(student.getRegNo().toUpperCase(), student);
+        cache.put(student.getRegNo().toUpperCase(Locale.ROOT), student);
         saveToCsv();
     }
 
     @Override
     public synchronized Optional<Student> findByRegNo(String regNo) {
-        if (regNo == null) return Optional.empty();
-        return Optional.ofNullable(cache.get(regNo.trim().toUpperCase()));
+        if (regNo == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(cache.get(regNo.trim().toUpperCase(Locale.ROOT)));
     }
 
     @Override
@@ -97,18 +104,20 @@ public class CsvStudentRepository implements StudentRepository {
 
     @Override
     public synchronized boolean update(Student student) {
-        if (student == null || !cache.containsKey(student.getRegNo().toUpperCase())) {
+        if (student == null || !cache.containsKey(student.getRegNo().toUpperCase(Locale.ROOT))) {
             return false;
         }
-        cache.put(student.getRegNo().toUpperCase(), student);
+        cache.put(student.getRegNo().toUpperCase(Locale.ROOT), student);
         saveToCsv();
         return true;
     }
 
     @Override
     public synchronized boolean deleteByRegNo(String regNo) {
-        if (regNo == null) return false;
-        Student removed = cache.remove(regNo.trim().toUpperCase());
+        if (regNo == null) {
+            return false;
+        }
+        Student removed = cache.remove(regNo.trim().toUpperCase(Locale.ROOT));
         if (removed != null) {
             saveToCsv();
             return true;
@@ -118,8 +127,10 @@ public class CsvStudentRepository implements StudentRepository {
 
     @Override
     public synchronized boolean existsByRegNo(String regNo) {
-        if (regNo == null) return false;
-        return cache.containsKey(regNo.trim().toUpperCase());
+        if (regNo == null) {
+            return false;
+        }
+        return cache.containsKey(regNo.trim().toUpperCase(Locale.ROOT));
     }
 
     @Override
@@ -127,9 +138,9 @@ public class CsvStudentRepository implements StudentRepository {
         if (name == null || name.trim().isEmpty()) {
             return Collections.emptyList();
         }
-        String lower = name.trim().toLowerCase();
+        String lower = name.trim().toLowerCase(Locale.ROOT);
         return cache.values().stream()
-                .filter(s -> s.getName().toLowerCase().contains(lower))
+                .filter(s -> s.getName().toLowerCase(Locale.ROOT).contains(lower))
                 .collect(Collectors.toList());
     }
 
@@ -138,9 +149,9 @@ public class CsvStudentRepository implements StudentRepository {
         if (department == null || department.trim().isEmpty()) {
             return Collections.emptyList();
         }
-        String lower = department.trim().toLowerCase();
+        String lower = department.trim().toLowerCase(Locale.ROOT);
         return cache.values().stream()
-                .filter(s -> s.getDepartment().toLowerCase().contains(lower))
+                .filter(s -> s.getDepartment().toLowerCase(Locale.ROOT).contains(lower))
                 .collect(Collectors.toList());
     }
 }

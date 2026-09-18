@@ -1,5 +1,6 @@
 package studentmanagement;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -61,12 +62,24 @@ public class Student {
         return mark1;
     }
 
+    public void setMark1(double mark1) {
+        this.mark1 = Math.max(0.0, Math.min(100.0, mark1));
+    }
+
     public double getMark2() {
         return mark2;
     }
 
+    public void setMark2(double mark2) {
+        this.mark2 = Math.max(0.0, Math.min(100.0, mark2));
+    }
+
     public double getMark3() {
         return mark3;
+    }
+
+    public void setMark3(double mark3) {
+        this.mark3 = Math.max(0.0, Math.min(100.0, mark3));
     }
 
     public void setMarks(double mark1, double mark2, double mark3) {
@@ -96,7 +109,7 @@ public class Student {
     }
 
     public String toCsv() {
-        return String.format("%s,%s,%s,%d,%.2f,%.2f,%.2f",
+        return String.format(Locale.US, "%s,%s,%s,%d,%.2f,%.2f,%.2f",
                 escapeCsv(regNo),
                 escapeCsv(name),
                 escapeCsv(department),
@@ -110,7 +123,7 @@ public class Student {
         if (line == null || line.trim().isEmpty()) {
             return null;
         }
-        String[] parts = line.split(",", -1);
+        String[] parts = line.split("(?<!\\\\),", -1);
         if (parts.length < 7) {
             return null;
         }
@@ -130,12 +143,12 @@ public class Student {
 
     private static String escapeCsv(String val) {
         if (val == null) return "";
-        return val.replace(",", "\\,");
+        return val.replace("\\", "\\\\").replace(",", "\\,");
     }
 
     private static String unescapeCsv(String val) {
         if (val == null) return "";
-        return val.replace("\\,", ",");
+        return val.replace("\\,", ",").replace("\\\\", "\\");
     }
 
     @Override
@@ -143,17 +156,17 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(regNo.toLowerCase(), student.regNo.toLowerCase());
+        return Objects.equals(regNo.toLowerCase(Locale.ROOT), student.regNo.toLowerCase(Locale.ROOT));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(regNo.toLowerCase());
+        return Objects.hash(regNo.toLowerCase(Locale.ROOT));
     }
 
     @Override
     public String toString() {
-        return String.format("Student[RegNo='%s', Name='%s', Dept='%s', Sem=%d, Avg=%.2f, Grade='%s']",
+        return String.format(Locale.US, "Student[RegNo='%s', Name='%s', Dept='%s', Sem=%d, Avg=%.2f, Grade='%s']",
                 regNo, name, department, semester, getAverage(), getGrade());
     }
 }

@@ -113,8 +113,8 @@ java -ea -cp bin studentmanagement.SystemTest
 
 **Expected Output**:
 ```
-Running Automated Tests...
-ALL 4 AUTOMATED TEST SUITES PASSED SUCCESSFULLY!
+Running Comprehensive Automated Tests...
+ALL AUTOMATED TEST SUITES PASSED SUCCESSFULLY!
 ```
 
 ---
